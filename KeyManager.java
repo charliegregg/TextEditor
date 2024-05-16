@@ -70,7 +70,6 @@ public class KeyManager extends KeyAdapter {
                 break;
         }
         win.updateText();
-        System.out.println(win.getFile().getEditor().getCursorManager().getCursors());
     }
     @Override
     public void keyReleased(KeyEvent event) {
@@ -89,6 +88,5 @@ public class KeyManager extends KeyAdapter {
             default:
                 break;
         }
-        System.out.println(win.getFile().getEditor().getCursorManager().getCursors());
     }
 }
