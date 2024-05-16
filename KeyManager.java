@@ -34,8 +34,8 @@ public class KeyManager extends KeyAdapter {
             case KeyEvent.VK_ENTER:
                 this.e.doType("\n");
                 break;
-            case KeyEvent.VK_CONTEXT_MENU:
-                this.e.cm.addCursor(0, 0);
+            case KeyEvent.VK_ALT:
+                this.e.doStartMultiplying();
                 break;
             default:
                 if (event.getKeyChar() != KeyEvent.CHAR_UNDEFINED) {
@@ -43,7 +43,6 @@ public class KeyManager extends KeyAdapter {
                 }
                 break;
         }
-        System.out.println(e.toString());
         win.updateText();
     }
     @Override
@@ -51,6 +50,9 @@ public class KeyManager extends KeyAdapter {
         switch (event.getKeyCode()) {
             case KeyEvent.VK_SHIFT:
                 this.e.doStopSelecting();
+                break;
+            case KeyEvent.VK_ALT:
+                this.e.doStopMultiplying();
                 break;
             default:
                 break;

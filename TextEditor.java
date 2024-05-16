@@ -1,6 +1,6 @@
 public class TextEditor {
-    protected Rope text;
-    protected CursorManager cm;
+    private Rope text;
+    private CursorManager cm;
 
     public TextEditor(String text) {
         this.text = new Rope(text);
@@ -67,6 +67,17 @@ public class TextEditor {
     public TextEditor doStopSelecting() {
         this.cm.stopSelecting();
         return this;
+    }
+    public TextEditor doStartMultiplying() {
+        this.cm.startMultiplying();
+        return this;
+    }
+    public TextEditor doStopMultiplying() {
+        this.cm.stopMultiplying();
+        return this;
+    }
+    public Rope getRope() {
+        return this.text;
     }
     public String toString() {
         return this.text.toString();

@@ -175,15 +175,15 @@ public class Tests {
 
         TextEditor e = new TextEditor(r3.toString() + r2.insert(9, "n even").remove(43, 13).insert(43, "insertion and removal").toString());
 
-        System.out.println(e.text);
+        System.out.println(e.getRope());
         e.doRight().doRight().doRight().doRight().doType(" te").doType("xt");
-        System.out.println(e.text);
+        System.out.println(e.getRope());
         e.doDown().doDown().doType(" types of");
-        System.out.println(e.text);
+        System.out.println(e.getRope());
         e.doUp().doRight().doRight().doDelete().doType("m").doStartSelecting().doRight().doRight().doRight().doRight().doRight().doRight().doRight().doType("any");
-        System.out.println(e.text);
-        System.out.println(e.text.stringRep());
-        System.out.println(e.text.reshape().stringRep());
+        System.out.println(e.getRope());
+        System.out.println(e.getRope().stringRep());
+        System.out.println(e.getRope().reshape().stringRep());
 
     }
 }

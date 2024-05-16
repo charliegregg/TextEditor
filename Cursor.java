@@ -1,23 +1,26 @@
 public class Cursor implements Comparable<Cursor> {
-    protected TextEditor e;
-    protected int x;
-    protected int y;
-    protected int pos;
-    protected int selX;
-    protected int selY;
-    protected int selPos;
-    protected boolean selecting;
-    protected boolean hasSelection;
-    public Cursor(TextEditor e, int x, int y, int selX, int selY) {
+    private TextEditor e;
+    private int x;
+    private int y;
+    private int pos;
+    private int selX;
+    private int selY;
+    private int selPos;
+    private boolean selecting;
+    private boolean hasSelection;
+    public Cursor(TextEditor e, int x, int y, int pos, int selX, int selY, int selPos, boolean selecting, boolean hasSelection) {
         this.e = e;
         this.x = x;
         this.y = y;
-        this.pos = this.e.getPos(x, y);
+        this.pos = pos;
         this.selX = selX;
         this.selY = selY;
-        this.selPos = this.e.getPos(selX, selY);
-        this.selecting = false;
-        this.hasSelection = (x != selX) || (y != selY);
+        this.selPos = selPos;
+        this.selecting = selecting;
+        this.hasSelection = hasSelection;
+    }
+    public Cursor(TextEditor e, int x, int y, int selX, int selY) {
+        this(e, x, y, e.getPos(x, y), selX, selY, e.getPos(selX, selY), false, (x != selX) || (y != selY));
     }
     public Cursor(TextEditor e, int x, int y) {
         this(e, x, y, 0, 0);
@@ -144,6 +147,9 @@ public class Cursor implements Comparable<Cursor> {
         }
         this.x = x;
         this.pos = this.e.getLineStart(y) + x;
+    }
+    public Cursor duplicate() {
+        return new Cursor(e, x, y, pos, selX, selY, selPos, selecting, hasSelection);
     }
     @Override
     public int compareTo(Cursor other) {

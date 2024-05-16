@@ -1,13 +1,13 @@
 
 
 public class Rope {
-    protected int leftChars;
-    protected int leftNewLines;
-    protected String value;
-    protected Rope left;
-    protected Rope right;
+    private int leftChars;
+    private int leftNewLines;
+    private String value;
+    private Rope left;
+    private Rope right;
 
-    protected static final int KNOT_THRESHOLD = 10;
+    private static final int KNOT_THRESHOLD = 10;
 
     public Rope(Rope left, Rope right) {
         this.leftChars = left.length();

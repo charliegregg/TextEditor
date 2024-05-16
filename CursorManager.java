@@ -1,11 +1,13 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class CursorManager {
-    protected TextEditor e;
-    protected ArrayList<Cursor> cursors;
+    private TextEditor e;
+    private ArrayList<Cursor> cursors;
+    private boolean multiplying;
 
     public CursorManager(TextEditor e) {
         this.e = e;
@@ -13,26 +15,35 @@ public class CursorManager {
         this.cursors.add(new Cursor(e));
     }
     public void left() {
-        for (Cursor cursor : this.cursors) {
+        this.move((Cursor cursor) -> {
             cursor.moveLeft();
-        }
-        removeDuplicates();
+        });
     }
     public void right() {
-        for (Cursor cursor : this.cursors) {
+        this.move((Cursor cursor) -> {
             cursor.moveRight();
-        }
-        removeDuplicates();
+        });
     }
     public void up() {
-        for (Cursor cursor : this.cursors) {
+        this.move((Cursor cursor) -> {
             cursor.moveUp();
-        }
-        removeDuplicates();
+        });
     }
     public void down() {
-        for (Cursor cursor : this.cursors) {
+        this.move((Cursor cursor) -> {
             cursor.moveDown();
+        });
+    }
+    public void move(Consumer<Cursor> mover) {
+        ArrayList<Cursor> copied = new ArrayList<>();
+        if (this.multiplying) {
+            this.operation((Cursor cursor) -> {
+                copied.add(cursor.duplicate());
+            });
+            this.operation(mover);
+            this.cursors.addAll(copied);
+        } else {
+            this.operation(mover);
         }
         removeDuplicates();
     }
@@ -56,14 +67,20 @@ public class CursorManager {
         removeDuplicates();
     }
     public void startSelecting() {
-        for (Cursor cursor : this.cursors) {
+        this.operation((Cursor cursor) -> {
             cursor.startSelecting();
-        }
+        });
     }
     public void stopSelecting() {
-        for (Cursor cursor : this.cursors) {
+        this.operation((Cursor cursor) -> {
             cursor.stopSelecting();
-        }
+        });
+    }
+    public void startMultiplying() {
+        this.multiplying = true;
+    }
+    public void stopMultiplying() {
+        this.multiplying = false;
     }
     public void shiftingOperation(BiFunction<Integer, Cursor, Integer> op) {
         sortCursors();
@@ -71,6 +88,11 @@ public class CursorManager {
         for (int i = 0; i < this.cursors.size(); i++) {
             this.cursors.get(i).movePos(shift);
             shift += op.apply(i, this.cursors.get(i));
+        }
+    }
+    public void operation(Consumer<Cursor> op) {
+        for (Cursor cursor : this.cursors) {
+            op.accept(cursor);
         }
     }
     public void addCursor(int x, int y) {
@@ -81,6 +103,8 @@ public class CursorManager {
         Collections.sort(this.cursors);
     }
     public void removeDuplicates() {
+        System.out.println(this.cursors);
         this.cursors = this.cursors.stream().distinct().collect(Collectors.toCollection(ArrayList::new));
+        System.out.println(this.cursors);
     }
 }
