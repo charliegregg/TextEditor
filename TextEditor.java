@@ -76,6 +76,21 @@ public class TextEditor {
         this.cm.stopMultiplying();
         return this;
     }
+    public TextEditor doCopy() {
+        this.cm.copy();
+        return this;
+    }
+    public TextEditor doPaste() {
+        this.cm.paste();
+        return this;
+    }
+    public TextEditor doCut() {
+        this.cm.cut();
+        return this;
+    }
+    public CursorManager getCursorManager() {
+        return this.cm;
+    }
     public Rope getRope() {
         return this.text;
     }

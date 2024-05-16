@@ -44,27 +44,19 @@ public class Cursor implements Comparable<Cursor> {
         this.setY(this.y + amount);
     }
     private void updateSelection() {
-        if (this.selecting) {
-            this.hasSelection = !isOnSelector();
-        } else {
-            this.hasSelection = false;
-        }
+        this.hasSelection = this.selecting && !isOnSelector();
     }
     public void moveLeft() {
         this.moveLeft(1);
-        updateSelection();
     }
     public void moveRight() {
         this.moveRight(1);
-        updateSelection();
     }
     public void moveUp() {
         this.moveUp(1);
-        updateSelection();
     }
     public void moveDown() {
         this.moveDown(1);
-        updateSelection();
     }
     public int insert(String value) {
         int offset = 0;
@@ -98,6 +90,9 @@ public class Cursor implements Comparable<Cursor> {
         return -1;
     }
     public void startSelecting() {
+        if (this.selecting) {
+            return;
+        }
         this.selecting = true;
         this.selX = this.x;
         this.selY = this.y;
@@ -115,6 +110,9 @@ public class Cursor implements Comparable<Cursor> {
     public int getSelectionEnd() {
         return Math.max(this.pos, this.selPos);
     }
+    public String getSelection() {
+        return this.e.getRope().sliceString(this.getSelectionStart(), this.getSelectionSize());
+    }
     public void setPos(int pos) {
         if (pos < 0) {
             pos = 0;
@@ -124,6 +122,7 @@ public class Cursor implements Comparable<Cursor> {
         this.pos = pos;
         this.x = this.e.getX(pos);
         this.y = this.e.getY(pos);
+        updateSelection();
     }
     public void movePos(int amount) {
         this.setPos(this.pos + amount);
@@ -138,6 +137,7 @@ public class Cursor implements Comparable<Cursor> {
         }
         this.y = y;
         this.pos = this.e.getLineStart(y) + Math.min(this.x, this.e.getLineWidth(y));
+        updateSelection();
     }
     public void setX(int x) {
         if (x < 0) {
@@ -147,6 +147,7 @@ public class Cursor implements Comparable<Cursor> {
         }
         this.x = x;
         this.pos = this.e.getLineStart(y) + x;
+        updateSelection();
     }
     public Cursor duplicate() {
         return new Cursor(e, x, y, pos, selX, selY, selPos, selecting, hasSelection);
@@ -165,5 +166,8 @@ public class Cursor implements Comparable<Cursor> {
             return false;
         }
         return this.pos == ((Cursor) other).pos;
+    }
+    public String toString() {
+        return "Cursor(" + this.x + ", " + this.y + ", " + this.pos + ", " + this.selX + ", " + this.selY + ", " + this.selPos + ", " + this.selecting + ", " + this.hasSelection + ")";
     }
 }
